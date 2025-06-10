@@ -1,25 +1,26 @@
-// api/index.js
-
 const express = require('express');
 const serverless = require('serverless-http');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const clientRoutes = require('../routes/clientRoutes');  // Adjust path accordingly
+const clientRoutes = require('../routes/clientRoutes');
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
 app.use('/api/clients', clientRoutes);
 
-// MongoDB connection (use environment variable for production)
 const mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/your-db';
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoDB)
   .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// Serverless handler
-module.exports.handler = serverless(app);
+// Global error handler (optional)
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+// Export default handler for Vercel
+module.exports = serverless(app);  // <--- Here is the fix
