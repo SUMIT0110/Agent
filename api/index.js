@@ -17,7 +17,7 @@ app.use('/api/clients', clientRoutes);
 
 // MongoDB connection (use environment variable for production)
 const mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/your-db';
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoDB)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
