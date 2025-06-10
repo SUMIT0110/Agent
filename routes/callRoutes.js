@@ -17,7 +17,7 @@ router.get('/logs', async (req, res) => {
 router.post('/initiate', async (req, res) => {
   const { phone } = req.body;
   try {
-    const call = await initiateCall(phone, 'https://example.com/api/calls/webhook');
+    const call = await initiateCall(phone, 'https://agent-mocha.vercel.app/api/calls/webhook');
     res.status(200).json({ success: true, sid: call.sid });
   } catch (err) {
     res.status(500).json({ error: err.message });
